@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "twitter-api-v1",
+    "twitter-api-v2",
+]
