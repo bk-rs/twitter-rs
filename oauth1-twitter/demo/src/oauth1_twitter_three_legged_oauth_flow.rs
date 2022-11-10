@@ -9,10 +9,8 @@ use std::{env, error};
 use http_api_isahc_client::{Client as _, IsahcClient};
 use log::info;
 use oauth1_twitter::{
-    endpoints::{
-        AccessTokenEndpoint, AuthenticateEndpoint, EndpointRet, InvalidateTokenEndpoint,
-        RequestTokenEndpoint,
-    },
+    build_authorization_url,
+    endpoints::{AccessTokenEndpoint, EndpointRet, InvalidateTokenEndpoint, RequestTokenEndpoint},
     objects::{CallbackUrlQuery, ConsumerKey},
 };
 use url::Url;
@@ -57,8 +55,9 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
     //
     // Step 2
     //
-    let authenticate_ep = AuthenticateEndpoint::new(&request_token_res_body.oauth_token);
-    let authorization_url = authenticate_ep.authorization_url()?;
+    let authorization_url =
+        build_authorization_url(true, &request_token_res_body.oauth_token, None, None)?;
+    let authorization_url = authorization_url.to_string();
 
     println!("please open {}", authorization_url);
 
