@@ -10,4 +10,4 @@ pub use authentication_access_token::AuthenticationAccessToken;
 pub use authentication_request_token::AuthenticationRequestToken;
 pub use callback_url_query::CallbackUrlQuery;
 pub use consumer_key::ConsumerKey;
-pub use response_body_fail::{ResponseBodyFail, ResponseBodyFailError};
+pub use response_body_fail::ResponseBodyFail;
