@@ -1,0 +1,18 @@
+[package]
+name = "oauth1-twitter-demo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "oauth1_twitter_three_legged_oauth_flow"
+path = "src/oauth1_twitter_three_legged_oauth_flow.rs"
+
+[dependencies]
+oauth1-twitter = { path = ".." }
+
+http-api-isahc-client = { version = "0.2" }
+
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+url = { version = "2.3" }
+pretty_env_logger = { version = "0.4" }
+log = { version = "0.4" }

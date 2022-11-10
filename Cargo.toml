@@ -1,5 +1,8 @@
 [workspace]
 members = [
+    "oauth1-twitter",
+    "oauth1-twitter/demo",
+    # 
     "twitter-api-v1",
     "twitter-api-v2",
 ]

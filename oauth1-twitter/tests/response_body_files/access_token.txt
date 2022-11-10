@@ -1,0 +1,1 @@
+oauth_token=62532xx-eWudHldSbIaelX7swmsiHImEL4KinwaGloxxxxxx&oauth_token_secret=2EEfA6BG5ly3sR3XjE0IBSnlQu4ZrUzPiYxxxxxx&user_id=6253282&screen_name=twitterapi
