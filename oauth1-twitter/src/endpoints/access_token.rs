@@ -162,7 +162,7 @@ mod tests {
                 assert_eq!(body.user_id, 6253282);
                 assert_eq!(body.screen_name, "twitterapi");
             }
-            EndpointRet::Other(_) => panic!("{:?}", ret),
+            EndpointRet::Other(_) => panic!("{ret:?}"),
         }
     }
 }

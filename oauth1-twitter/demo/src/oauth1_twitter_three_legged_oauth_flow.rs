@@ -42,11 +42,7 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
     let request_token_res_body = match &ret {
         EndpointRet::Ok(body) => body,
         EndpointRet::Other((status_code, body)) => {
-            return Err(format!(
-                "request_token_ep status_code:{} body:{:?}",
-                status_code, body
-            )
-            .into());
+            return Err(format!("request_token_ep status_code:{status_code} body:{body:?}").into());
         }
     };
     info!("{:?}", request_token_res_body);
@@ -59,7 +55,7 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
         build_authorization_url(true, &request_token_res_body.oauth_token, None, None)?;
     let authorization_url = authorization_url.to_string();
 
-    println!("please open {}", authorization_url);
+    println!("please open {authorization_url}");
 
     println!("input callback_url: ");
     let mut callback_url = String::new();
@@ -87,11 +83,7 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
     let access_token_res_body = match &ret {
         EndpointRet::Ok(body) => body,
         EndpointRet::Other((status_code, body)) => {
-            return Err(format!(
-                "access_token_ep status_code:{} body:{:?}",
-                status_code, body
-            )
-            .into());
+            return Err(format!("access_token_ep status_code:{status_code} body:{body:?}").into());
         }
     };
     info!("{:?}", access_token_res_body);
@@ -107,11 +99,9 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
     let invalidate_token_res_body = match &ret {
         EndpointRet::Ok(body) => body,
         EndpointRet::Other((status_code, body)) => {
-            return Err(format!(
-                "invalidate_token_ep status_code:{} body:{:?}",
-                status_code, body
-            )
-            .into());
+            return Err(
+                format!("invalidate_token_ep status_code:{status_code} body:{body:?}",).into(),
+            );
         }
     };
     info!("{:?}", invalidate_token_res_body);

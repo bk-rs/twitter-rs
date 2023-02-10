@@ -170,7 +170,7 @@ mod tests {
                 assert_eq!(body.oauth_token_secret, "pBYEQzdbyMqIcyDzyn0X7LDxxxxxxxxx");
                 assert!(body.oauth_callback_confirmed);
             }
-            EndpointRet::Other(_) => panic!("{:?}", ret),
+            EndpointRet::Other(_) => panic!("{ret:?}"),
         }
 
         //
@@ -187,7 +187,7 @@ mod tests {
         .unwrap();
         match &ret {
             EndpointRet::Ok(_) => {
-                panic!("{:?}", ret)
+                panic!("{ret:?}")
             }
             EndpointRet::Other((status_code, body)) => {
                 assert_eq!(status_code, &StatusCode::BAD_REQUEST);

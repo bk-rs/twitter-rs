@@ -129,7 +129,7 @@ mod tests {
             EndpointRet::Ok(body) => {
                 assert_eq!(body.access_token, "ACCESS_TOKEN");
             }
-            EndpointRet::Other(_) => panic!("{:?}", ret),
+            EndpointRet::Other(_) => panic!("{ret:?}"),
         }
 
         //
@@ -147,7 +147,7 @@ mod tests {
         .unwrap();
         match &ret {
             EndpointRet::Ok(_) => {
-                panic!("{:?}", ret)
+                panic!("{ret:?}")
             }
             EndpointRet::Other((status_code, body)) => {
                 assert_eq!(status_code, &StatusCode::UNAUTHORIZED);
