@@ -1,0 +1,20 @@
+[package]
+name = "twitter-api-v1-demo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "twitter_api_v1_demo_image"
+path = "src/image.rs"
+
+[[bin]]
+name = "twitter_api_v1_demo_video"
+path = "src/video.rs"
+
+[dependencies]
+twitter-api-v1 = { path = "..", features = ["with_tokio_fs"] }
+reqwest = { version = "0.11" }
+
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+pretty_env_logger = { version = "0.4" }

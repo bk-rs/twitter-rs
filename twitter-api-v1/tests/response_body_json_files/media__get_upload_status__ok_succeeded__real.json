@@ -1,0 +1,14 @@
+{
+    "media_id": 1579341048664711168,
+    "media_id_string": "1579341048664711168",
+    "media_key": "7_1579341048664711168",
+    "size": 10564959,
+    "expires_after_secs": 86395,
+    "video": {
+        "video_type": "video/mp4"
+    },
+    "processing_info": {
+        "state": "succeeded",
+        "progress_percent": 100
+    }
+}

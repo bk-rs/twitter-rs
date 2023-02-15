@@ -1,0 +1,11 @@
+{
+    "media_id": 1579338012403453953,
+    "media_id_string": "1579338012403453953",
+    "media_key": "7_1579338012403453953",
+    "size": 10564959,
+    "expires_after_secs": 86400,
+    "processing_info": {
+        "state": "pending",
+        "check_after_secs": 1
+    }
+}
