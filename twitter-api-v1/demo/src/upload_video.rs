@@ -1,5 +1,5 @@
 /*
-RUST_BACKTRACE=1 RUST_LOG=trace cargo run -p twitter-api-v1-demo --bin twitter_api_v1_demo_video -- 'YOUR_CONSUMER_KEY' 'YOUR_CONSUMER_SECRET' 'YOUR_ACCESS_TOKEN' 'YOUR_ACCESS_TOKEN_SECRET' '/path/x.mp4' 'Hello'
+RUST_BACKTRACE=1 RUST_LOG=trace cargo run -p twitter-api-v1-demo --bin twitter_api_v1_demo_upload_video -- 'YOUR_CONSUMER_KEY' 'YOUR_CONSUMER_SECRET' 'YOUR_ACCESS_TOKEN' 'YOUR_ACCESS_TOKEN_SECRET' '/path/x.mp4' 'Hello'
 */
 
 use std::env;
