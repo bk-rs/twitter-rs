@@ -356,7 +356,7 @@ pub async fn upload_append_all_from_file(
             x => return Ok(Err(x)),
         };
 
-        if file_index_start + SEGMENT_SIZE > file_size as usize {
+        if file_index_start + SEGMENT_SIZE >= file_size as usize {
             break;
         }
     }
