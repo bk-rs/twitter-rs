@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
         match ret {
             EndpointRet::Ok(ok_json) => {
-                println!("show_user_by_id:{ok_json:?}");
+                println!("show_user_by_screen_name:{ok_json:?}");
             }
             x => panic!("{x:?}"),
         };

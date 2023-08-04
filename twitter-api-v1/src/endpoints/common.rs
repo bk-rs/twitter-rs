@@ -19,6 +19,10 @@ pub enum EndpointError {
     RespondFailed(ReqwestOauth1Error),
     ReadResponseBodyFailed(ReqwestError),
     DeResponseBodyOkJsonFailed(SerdeJsonError),
+    //
+    DeV2ResponseBodyOkJsonFailed(SerdeJsonError),
+    ConvertV2ResponseBodyOkJsonFailed(String),
+    //
     #[cfg(feature = "with_tokio_fs")]
     GetFileInfoFailed(std::io::Error),
     #[cfg(feature = "with_tokio_fs")]

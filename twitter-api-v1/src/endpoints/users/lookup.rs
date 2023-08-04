@@ -1,15 +1,17 @@
 use reqwest::{Client, StatusCode};
 use reqwest_oauth1::OAuthClientProvider as _;
-use serde_json::Map;
+use twitter_api_v2::{
+    endpoints::users::lookup::{
+        url_for_user_by_id, url_for_user_by_username, SingleUserResponseBody,
+    },
+    objects::ResponseBodyErrJson as V2ResponseBodyErrJson,
+};
 
 use crate::{
     endpoints::common::{EndpointError, EndpointRet},
-    objects::{ResponseBodyErrJson, User},
+    objects::User,
     secrets::TokenSecrets,
 };
-
-//
-pub const SHOW_USER_URL: &str = "https://api.twitter.com/1.1/users/show.json";
 
 //
 //
@@ -18,20 +20,15 @@ pub async fn show_user_by_id(
     secrets: &TokenSecrets,
     client: Client,
     user_id: u64,
-    include_entities: Option<bool>,
+    _include_entities: Option<bool>,
 ) -> Result<EndpointRet<User>, EndpointError> {
     //
-    let mut query = Map::new();
-    query.insert("user_id".into(), user_id.into());
-    if let Some(include_entities) = include_entities {
-        query.insert("include_entities".into(), include_entities.into());
-    }
+    let url = url_for_user_by_id(user_id);
 
     //
     let response = client
         .oauth1(secrets.secrets())
-        .get(SHOW_USER_URL)
-        .query(&query)
+        .get(url)
         .send()
         .await
         .map_err(EndpointError::RespondFailed)?;
@@ -45,12 +42,15 @@ pub async fn show_user_by_id(
     let response_body = response_body.as_ref();
 
     match response_status {
-        StatusCode::OK => Ok(EndpointRet::Ok(
-            serde_json::from_slice(response_body)
-                .map_err(EndpointError::DeResponseBodyOkJsonFailed)?,
-        )),
-        status => match serde_json::from_slice::<ResponseBodyErrJson>(response_body) {
-            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json)))),
+        StatusCode::OK => {
+            let response_body = serde_json::from_slice::<SingleUserResponseBody>(response_body)
+                .map_err(EndpointError::DeV2ResponseBodyOkJsonFailed)?;
+            let user = User::try_from(response_body.data)
+                .map_err(EndpointError::ConvertV2ResponseBodyOkJsonFailed)?;
+            Ok(EndpointRet::Ok(user))
+        }
+        status => match serde_json::from_slice::<V2ResponseBodyErrJson>(response_body) {
+            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json.into())))),
             Err(_) => Ok(EndpointRet::Other((status, Err(response_body.to_owned())))),
         },
     }
@@ -63,20 +63,15 @@ pub async fn show_user_by_screen_name(
     secrets: &TokenSecrets,
     client: Client,
     screen_name: impl AsRef<str>,
-    include_entities: Option<bool>,
+    _include_entities: Option<bool>,
 ) -> Result<EndpointRet<User>, EndpointError> {
     //
-    let mut query = Map::new();
-    query.insert("screen_name".into(), screen_name.as_ref().into());
-    if let Some(include_entities) = include_entities {
-        query.insert("include_entities".into(), include_entities.into());
-    }
+    let url = url_for_user_by_username(screen_name);
 
     //
     let response = client
         .oauth1(secrets.secrets())
-        .get(SHOW_USER_URL)
-        .query(&query)
+        .get(url)
         .send()
         .await
         .map_err(EndpointError::RespondFailed)?;
@@ -90,12 +85,15 @@ pub async fn show_user_by_screen_name(
     let response_body = response_body.as_ref();
 
     match response_status {
-        StatusCode::OK => Ok(EndpointRet::Ok(
-            serde_json::from_slice(response_body)
-                .map_err(EndpointError::DeResponseBodyOkJsonFailed)?,
-        )),
-        status => match serde_json::from_slice::<ResponseBodyErrJson>(response_body) {
-            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json)))),
+        StatusCode::OK => {
+            let response_body = serde_json::from_slice::<SingleUserResponseBody>(response_body)
+                .map_err(EndpointError::DeV2ResponseBodyOkJsonFailed)?;
+            let user = User::try_from(response_body.data)
+                .map_err(EndpointError::ConvertV2ResponseBodyOkJsonFailed)?;
+            Ok(EndpointRet::Ok(user))
+        }
+        status => match serde_json::from_slice::<V2ResponseBodyErrJson>(response_body) {
+            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json.into())))),
             Err(_) => Ok(EndpointRet::Other((status, Err(response_body.to_owned())))),
         },
     }

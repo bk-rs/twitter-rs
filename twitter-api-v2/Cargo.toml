@@ -1,6 +1,6 @@
 [package]
 name = "twitter-api-v2"
-version = "0.0.0"
+version = "0.0.1"
 authors = ["vkill <vkill.net@gmail.com>"]
 edition = "2021"
 description = "Twitter API v2"
@@ -13,6 +13,8 @@ categories = []
 readme = "README.md"
 
 [dependencies]
+http-api-client-endpoint = { version = "0.2", default-features = false }
+
 serde = { version = "1", default-features = false, features = ["derive"] }
 serde-aux = { version = "4", default-features = false }
 serde_json = { version = "1", default-features = false, features = ["std"] }

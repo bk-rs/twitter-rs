@@ -25,9 +25,3 @@ pub struct User {
     pub verified: Option<bool>,
     pub withheld: Option<Value>,
 }
-
-impl User {
-    pub fn screen_name(&self) -> Option<&str> {
-        self.username.as_deref()
-    }
-}

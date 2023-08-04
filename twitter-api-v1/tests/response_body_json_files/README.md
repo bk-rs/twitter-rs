@@ -19,7 +19,3 @@ https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/api-refe
 ### tweets__create_tweet__ok.json
 
 https://developer.twitter.com/en/docs/twitter-api/v1/tweets/post-and-engage/api-reference/post-statuses-update
-
-### user.json
-
-https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/user
