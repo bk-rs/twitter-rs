@@ -1,5 +1,6 @@
 use reqwest::{Client, StatusCode};
 use reqwest_oauth1::OAuthClientProvider as _;
+use serde_json::Map;
 use twitter_api_v2::{
     endpoints::users::lookup::{
         url_for_user_by_id, url_for_user_by_username, SingleUserResponseBody,
@@ -20,15 +21,25 @@ pub async fn show_user_by_id(
     secrets: &TokenSecrets,
     client: Client,
     user_id: u64,
-    _include_entities: Option<bool>,
+    include_entities: Option<bool>,
 ) -> Result<EndpointRet<User>, EndpointError> {
     //
     let url = url_for_user_by_id(user_id);
+
+    let mut query = Map::new();
+    query.insert(
+        "user.fields".into(),
+        "id,name,username,profile_image_url".into(),
+    );
+    if include_entities == Some(true) {
+        query.insert("expansions".into(), "pinned_tweet_id".into());
+    }
 
     //
     let response = client
         .oauth1(secrets.secrets())
         .get(url)
+        .query(&query)
         .send()
         .await
         .map_err(EndpointError::RespondFailed)?;
@@ -63,15 +74,25 @@ pub async fn show_user_by_screen_name(
     secrets: &TokenSecrets,
     client: Client,
     screen_name: impl AsRef<str>,
-    _include_entities: Option<bool>,
+    include_entities: Option<bool>,
 ) -> Result<EndpointRet<User>, EndpointError> {
     //
     let url = url_for_user_by_username(screen_name);
+
+    let mut query = Map::new();
+    query.insert(
+        "user.fields".into(),
+        "id,name,username,profile_image_url".into(),
+    );
+    if include_entities == Some(true) {
+        query.insert("expansions".into(), "pinned_tweet_id".into());
+    }
 
     //
     let response = client
         .oauth1(secrets.secrets())
         .get(url)
+        .query(&query)
         .send()
         .await
         .map_err(EndpointError::RespondFailed)?;
