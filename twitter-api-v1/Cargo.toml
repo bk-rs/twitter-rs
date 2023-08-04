@@ -21,8 +21,14 @@ with_tokio = ["tokio", "tokio-util"]
 with_tokio_fs = ["with_tokio", "tokio/fs"]
 
 [dependencies]
-reqwest-oauth1 = { version = "0.2", default-features = false, features = ["multipart"] }
-reqwest = { version = "0.11", default-features = false, features = ["default-tls", "stream", "multipart"] }
+reqwest-oauth1 = { version = "0.2", default-features = false, features = [
+    "multipart",
+] }
+reqwest = { version = "0.11", default-features = false, features = [
+    "default-tls",
+    "stream",
+    "multipart",
+] }
 
 serde = { version = "1", default-features = false, features = ["derive"] }
 serde_json = { version = "1", default-features = false }
