@@ -57,7 +57,7 @@ pub async fn create_tweet(
     let response = client
         .oauth1(secrets.secrets())
         .post(V2_URL_FOR_TWEETS_CREATE)
-        .form(&form)
+        .json(&form)
         .send()
         .await
         .map_err(EndpointError::RespondFailed)?;
@@ -71,7 +71,7 @@ pub async fn create_tweet(
     let response_body = response_body.as_ref();
 
     match response_status {
-        StatusCode::OK => {
+        StatusCode::CREATED => {
             let response_body = serde_json::from_slice::<V2TweetsCreateResponseBody>(response_body)
                 .map_err(EndpointError::DeV2ResponseBodyOkJsonFailed)?;
             Ok(EndpointRet::Ok(CreateTweetResponseBodyOkJson::from(
