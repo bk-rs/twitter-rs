@@ -2,15 +2,18 @@ use reqwest::{Client, StatusCode};
 use reqwest_oauth1::OAuthClientProvider as _;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
+use twitter_api_v2::{
+    endpoints::tweets::manage_tweets::{
+        TweetsCreateResponseBody as V2TweetsCreateResponseBody,
+        URL_FOR_TWEETS_CREATE as V2_URL_FOR_TWEETS_CREATE,
+    },
+    objects::ResponseBodyErrJson as V2ResponseBodyErrJson,
+};
 
 use crate::{
     endpoints::common::{EndpointError, EndpointRet},
-    objects::ResponseBodyErrJson,
     secrets::TokenSecrets,
 };
-
-//
-pub const CREATE_TWEET_URL: &str = "https://api.twitter.com/1.1/statuses/update.json";
 
 //
 //
@@ -31,18 +34,20 @@ pub async fn create_tweet(
     //
     let mut form = Map::new();
     if let Some(status) = status {
-        form.insert("status".into(), status.into());
+        form.insert("text".into(), status.into());
     }
     if let Some(media_ids) = media_ids {
-        form.insert(
+        let mut media = Map::new();
+        media.insert(
             "media_ids".into(),
             media_ids
                 .iter()
                 .map(|x| x.to_string())
                 .collect::<Vec<_>>()
-                .join(",")
                 .into(),
         );
+
+        form.insert("media".into(), media.into());
     }
     if let Some(mut other_parameters) = other_parameters {
         form.append(&mut other_parameters);
@@ -51,7 +56,7 @@ pub async fn create_tweet(
     //
     let response = client
         .oauth1(secrets.secrets())
-        .post(CREATE_TWEET_URL)
+        .post(V2_URL_FOR_TWEETS_CREATE)
         .form(&form)
         .send()
         .await
@@ -66,12 +71,15 @@ pub async fn create_tweet(
     let response_body = response_body.as_ref();
 
     match response_status {
-        StatusCode::OK => Ok(EndpointRet::Ok(
-            serde_json::from_slice(response_body)
-                .map_err(EndpointError::DeResponseBodyOkJsonFailed)?,
-        )),
-        status => match serde_json::from_slice::<ResponseBodyErrJson>(response_body) {
-            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json)))),
+        StatusCode::OK => {
+            let response_body = serde_json::from_slice::<V2TweetsCreateResponseBody>(response_body)
+                .map_err(EndpointError::DeV2ResponseBodyOkJsonFailed)?;
+            Ok(EndpointRet::Ok(CreateTweetResponseBodyOkJson::from(
+                response_body,
+            )))
+        }
+        status => match serde_json::from_slice::<V2ResponseBodyErrJson>(response_body) {
+            Ok(err_json) => Ok(EndpointRet::Other((status, Ok(err_json.into())))),
             Err(_) => Ok(EndpointRet::Other((status, Err(response_body.to_owned())))),
         },
     }
@@ -84,19 +92,12 @@ pub struct CreateTweetResponseBodyOkJson {
     pub id_string: String,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn de_create_tweet_response_body_ok_json() {
-        match serde_json::from_str::<CreateTweetResponseBodyOkJson>(include_str!(
-            "../../../tests/response_body_json_files/tweets__create_tweet__ok.json"
-        )) {
-            Ok(ok_json) => {
-                assert_eq!(ok_json.id, 1050118621198921700);
-            }
-            Err(err) => panic!("{err}"),
+//
+impl From<V2TweetsCreateResponseBody> for CreateTweetResponseBodyOkJson {
+    fn from(value: V2TweetsCreateResponseBody) -> Self {
+        Self {
+            id: value.data.id,
+            id_string: value.data.id.to_string(),
         }
     }
 }

@@ -4,16 +4,20 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
+name = "twitter_api_v1_demo_create_tweet"
+path = "src/create_tweet.rs"
+
+[[bin]]
+name = "twitter_api_v1_demo_show_user"
+path = "src/show_user.rs"
+
+[[bin]]
 name = "twitter_api_v1_demo_upload_image"
 path = "src/upload_image.rs"
 
 [[bin]]
 name = "twitter_api_v1_demo_upload_video"
 path = "src/upload_video.rs"
-
-[[bin]]
-name = "twitter_api_v1_demo_show_user"
-path = "src/show_user.rs"
 
 [dependencies]
 twitter-api-v1 = { path = "..", features = ["with_tokio_fs"] }

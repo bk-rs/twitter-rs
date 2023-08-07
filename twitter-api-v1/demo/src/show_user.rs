@@ -41,8 +41,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         oauth_token_secret,
     );
 
+    let client = reqwest::Client::builder()
+        .connection_verbose(env::var("RUST_LOG").map(|x| x.starts_with("trace")) == Ok(true))
+        .danger_accept_invalid_certs(true)
+        .build()?;
+
     if let Ok(id) = id_or_screen_name.parse::<u64>() {
-        let ret = show_user_by_id(&token_secrets, reqwest::Client::new(), id, None).await?;
+        let ret = show_user_by_id(&token_secrets, client, id, None).await?;
         match ret {
             EndpointRet::Ok(ok_json) => {
                 println!("show_user_by_id:{ok_json:?}");
@@ -50,13 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             x => panic!("{x:?}"),
         };
     } else {
-        let ret = show_user_by_screen_name(
-            &token_secrets,
-            reqwest::Client::new(),
-            id_or_screen_name,
-            None,
-        )
-        .await?;
+        let ret = show_user_by_screen_name(&token_secrets, client, id_or_screen_name, None).await?;
         match ret {
             EndpointRet::Ok(ok_json) => {
                 println!("show_user_by_screen_name:{ok_json:?}");

@@ -15,7 +15,3 @@ https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/api-refe
 ### media__upload_init__ok.json
 
 https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/api-reference/post-media-upload-init
-
-### tweets__create_tweet__ok.json
-
-https://developer.twitter.com/en/docs/twitter-api/v1/tweets/post-and-engage/api-reference/post-statuses-update

@@ -35,7 +35,7 @@ mod tests {
     #[test]
     fn test_de_response_body() {
         match serde_json::from_str::<SingleUserResponseBody>(include_str!(
-            "../../../tests/response_body_json_files/users_lookup__me__default_fields.json"
+            "../../../tests/response_body_json_files/users__lookup__me__default_fields.json"
         )) {
             Ok(body) => {
                 assert_eq!(body.data.id.unwrap(), 2244994945);
@@ -44,7 +44,7 @@ mod tests {
         }
 
         match serde_json::from_str::<SingleUserResponseBody>(include_str!(
-            "../../../tests/response_body_json_files/users_lookup__me__optional_fields.json"
+            "../../../tests/response_body_json_files/users__lookup__me__optional_fields.json"
         )) {
             Ok(body) => {
                 println!("{body:?}");

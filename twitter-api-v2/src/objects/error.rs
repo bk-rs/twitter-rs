@@ -1,14 +1,16 @@
 // https://developer.twitter.com/en/support/twitter-api/error-troubleshooting
 
 use serde::{Deserialize, Serialize};
+use serde_json::{Map, Value};
 
 //
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Error {
-    pub status: Option<u16>,
     pub r#type: String,
     pub title: String,
     pub detail: String,
+    #[serde(flatten)]
+    pub _others: Map<String, Value>,
 }
 
 #[cfg(test)]
@@ -16,7 +18,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_de() {
+    fn test_de_error() {
         let json = r#"
         {
             "client_id": "101010101",
@@ -31,6 +33,16 @@ mod tests {
         match serde_json::from_str::<Error>(json) {
             Ok(error) => {
                 assert_eq!(error.title, "Client Forbidden");
+            }
+            Err(err) => panic!("{err}"),
+        }
+
+        //
+        match serde_json::from_str::<Error>(include_str!(
+            "../../tests/response_body_json_files/tweets__manage_tweets__create__err.json"
+        )) {
+            Ok(error) => {
+                assert_eq!(error.title, "Invalid Request");
             }
             Err(err) => panic!("{err}"),
         }
