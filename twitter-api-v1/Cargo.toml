@@ -1,6 +1,6 @@
 [package]
 name = "twitter-api-v1"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["vkill <vkill.net@gmail.com>"]
 edition = "2021"
 description = "Twitter API Standard v1.1"
@@ -21,7 +21,7 @@ with_tokio = ["tokio", "tokio-util"]
 with_tokio_fs = ["with_tokio", "tokio/fs"]
 
 [dependencies]
-twitter-api-v2 = { path = "../twitter-api-v2" }
+twitter-api-v2 = { version = "0", path = "../twitter-api-v2" }
 
 reqwest-oauth1 = { version = "0.2.4", default-features = false, features = [
     "multipart",
